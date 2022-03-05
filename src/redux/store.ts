@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-// ...
+import colorModeReducer from './features/colorMode';
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    colorMode: colorModeReducer,
+  },
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

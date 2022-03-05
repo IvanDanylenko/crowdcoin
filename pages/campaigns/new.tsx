@@ -1,11 +1,11 @@
 import type { NextPage, GetStaticProps } from 'next';
-import HomeTemplate from '@templates/HomeTemplate';
+import CampaignCreateTemplate from '@templates/CampaignCreateTemplate';
 
-const Home: NextPage = () => {
-  return <HomeTemplate />;
+const NewCampaignPage: NextPage = () => {
+  return <CampaignCreateTemplate />;
 };
 
-export default Home;
+export default NewCampaignPage;
 
 export const getStaticProps: GetStaticProps = async context => {
   const locale = context.locale || context.defaultLocale;

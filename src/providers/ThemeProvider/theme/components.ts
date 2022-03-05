@@ -1,13 +1,13 @@
 import { Components, createTheme } from '@mui/material/styles';
 
-import palette from './palette';
+import { lightPalette } from './palette';
 import typography from './typography';
 import breakpoints from './breakpoints';
-import { SPACING, BORDER_RADIUS } from './constants';
+import { SPACING } from './constants';
 
 // Create a partial theme to use for components customization
 const theme = createTheme({
-  palette,
+  palette: lightPalette,
   typography,
   breakpoints,
   spacing: SPACING,

@@ -1,10 +1,8 @@
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import { CssBaseline, ThemeProvider } from '@mui/material';
 import { CacheProvider, EmotionCache } from '@emotion/react';
-import { Provider } from 'react-redux';
-import theme, { createEmotionCache } from '@/theme';
-import { store } from '@/state/store';
+
+import { ReduxProvider, I18nProvider, ThemeProvider, createEmotionCache } from '@/providers';
 
 import '@fontsource/inter/variable.css';
 
@@ -23,12 +21,13 @@ const MyApp = (props: MyAppProps) => {
         <title>Kickstarter</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </Provider>
+      <ReduxProvider>
+        <I18nProvider table={pageProps.table}>
+          <ThemeProvider>
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </I18nProvider>
+      </ReduxProvider>
     </CacheProvider>
   );
 };
