@@ -14,12 +14,12 @@ const Header: FC = () => {
       <Container maxWidth="xl">
         <Toolbar disableGutters variant="dense">
           <Grid container alignItems="center" justifyContent="space-between">
-            <Grid item md={2}>
+            <Grid item xs={3} sm={2}>
               <Link href="/" variant="h6" noWrap color="textPrimary" underline="none">
                 CrowdCoin
               </Link>
             </Grid>
-            <Grid item md={6} container alignItems="center" justifyContent="flex-end">
+            <Grid item xs={6} container alignItems="center" justifyContent="flex-end">
               <Link
                 href="/"
                 color="textPrimary"

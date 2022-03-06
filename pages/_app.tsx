@@ -4,6 +4,7 @@ import { CacheProvider, EmotionCache } from '@emotion/react';
 
 import { ReduxProvider, I18nProvider, ThemeProvider, createEmotionCache } from '@/providers';
 
+// Fonts
 import '@fontsource/inter/variable.css';
 
 // Client-side cache, shared for the whole session of the user in the browser.

@@ -1,21 +1,13 @@
 import ganache from 'ganache';
-import { ethers, Contract, VoidSigner, ContractTransaction } from 'ethers';
+import { ethers, VoidSigner } from 'ethers';
 import compiledFactory from '../build/CampaignFactory.json';
 import compiledCampaign from '../build/Campaign.json';
+import { CampaignFactoryContract } from '../contracts/Campaign';
 
 // eslint-disable-next-line
 const ganacheProvider = ganache.provider({ logging: { quiet: true } }) as any;
 
 const provider = new ethers.providers.Web3Provider(ganacheProvider);
-
-interface CampaignFactoryContract extends Contract {
-  deployedCampaigns: (index: number) => Promise<string>;
-  createCampaign: (
-    managerAddress: string,
-    minimumContribution: string,
-  ) => Promise<ContractTransaction>;
-  getDeployedCampaigns: () => Promise<string[]>;
-}
 
 describe('CampaignFactory contract', () => {
   // Contract minimum contribution

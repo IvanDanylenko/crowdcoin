@@ -31,6 +31,12 @@ const components: Components = {
       }
     `,
   },
+  MuiButton: {
+    defaultProps: {
+      variant: 'contained',
+      disableElevation: true,
+    },
+  },
 };
 
 export default components;

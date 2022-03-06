@@ -1,77 +1,22 @@
 import ganache from 'ganache';
-import {
-  ethers,
-  utils,
-  Contract,
-  Signer,
-  PayableOverrides,
-  ContractTransaction,
-  BigNumber,
-} from 'ethers';
+import { ethers, utils, BigNumber } from 'ethers';
 import compiledCampaign from '../build/Campaign.json';
+import {
+  NOT_MANAGER_ERROR,
+  NOT_CONTRIBUTOR_ERROR,
+  REQUEST_COMPLETED_ERROR,
+  REQUEST_APPROVED_ERROR,
+  APPROVALS_ERROR,
+  MINIMUM_CONTRIBUTION_ERROR,
+  PaymentRequest,
+  CampaignContract,
+  normalizeStructRequest,
+} from '../contracts/Campaign';
 
 // eslint-disable-next-line
 const ganacheProvider = ganache.provider({ logging: { quiet: true } }) as any;
 
 const provider = new ethers.providers.Web3Provider(ganacheProvider);
-
-interface PaymentRequest {
-  description: string;
-  recipient: string;
-  amount: BigNumber;
-  isCompleted: boolean;
-  approvalsCount: number;
-}
-
-type RequestStruct = [
-  // description
-  string,
-  // recipient
-  string,
-  // amount
-  BigNumber,
-  // isCompleted
-  boolean,
-  // approvalsCount
-  BigNumber,
-];
-
-interface CampaignContract extends Contract {
-  // overrides
-  connect(signer: Signer): CampaignContract;
-
-  // getters
-  contributors: (address: string) => Promise<boolean>;
-  manager: () => Promise<string>;
-  minimumContribution: () => Promise<string>;
-  contributorsCount: () => Promise<number>;
-  requests: (index: number) => Promise<RequestStruct>;
-
-  // setters
-  contribute: (overrides: PayableOverrides) => Promise<ContractTransaction>;
-  createRequest: (
-    description: string,
-    recipient: string,
-    amount: BigNumber | string,
-  ) => Promise<ContractTransaction>;
-  approveRequest: (index: number) => Promise<ContractTransaction>;
-  finalizeRequest: (index: number) => Promise<ContractTransaction>;
-}
-
-const NOT_MANAGER_ERROR = 'Caller is not a manager';
-const NOT_CONTRIBUTOR_ERROR = 'Caller is not a contributor';
-const REQUEST_COMPLETED_ERROR = 'Request is completed';
-const REQUEST_APPROVED_ERROR = 'Request was already approved';
-const APPROVALS_ERROR = 'Request has not enought approvals';
-const MINIMUM_CONTRIBUTION_ERROR = 'Minimum contribution is required';
-
-const normalizeStructRequest = (requestStruct: RequestStruct): PaymentRequest => ({
-  description: requestStruct[0],
-  recipient: requestStruct[1],
-  amount: BigNumber.from(requestStruct[2]),
-  isCompleted: requestStruct[3],
-  approvalsCount: BigNumber.from(requestStruct[4]).toNumber(),
-});
 
 describe('Campaign contract', () => {
   const minimumContribution = '100';
