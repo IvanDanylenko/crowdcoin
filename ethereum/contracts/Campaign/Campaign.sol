@@ -57,8 +57,11 @@ contract Campaign {
 
     function contribute() public payable {
         require(msg.value >= minimumContribution, "Minimum contribution is required");
-        contributors[msg.sender] = true;
-        contributorsCount++;
+        // Check if person already is contributor
+        if (!contributors[msg.sender]) {
+            contributors[msg.sender] = true;
+            contributorsCount++;
+        }
     }
 
     function createRequest(string memory description, address recipient, uint amount) public isManager {

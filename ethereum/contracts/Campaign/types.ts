@@ -28,8 +28,8 @@ export interface CampaignContract extends Contract {
   // getters
   contributors: (address: string) => Promise<boolean>;
   manager: () => Promise<string>;
-  minimumContribution: () => Promise<string>;
-  contributorsCount: () => Promise<number>;
+  minimumContribution: () => Promise<BigNumber>;
+  contributorsCount: () => Promise<BigNumber>;
   requests: (index: number) => Promise<RequestStruct>;
 
   // setters

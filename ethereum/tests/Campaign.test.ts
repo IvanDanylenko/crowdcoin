@@ -69,6 +69,23 @@ describe('Campaign contract', () => {
     ).rejects.toThrow(MINIMUM_CONTRIBUTION_ERROR);
   });
 
+  it('does not increase count of contributors on contribution from same contributor', async () => {
+    const initialContributorsCount = BigNumber.from(await campaign.contributorsCount()).toNumber();
+    expect(initialContributorsCount).toBe(0);
+
+    const tx1 = await campaign.connect(signer1).contribute({ value: ethers.BigNumber.from('100') });
+    await tx1.wait();
+
+    const firstContributionCount = BigNumber.from(await campaign.contributorsCount()).toNumber();
+    expect(firstContributionCount).toBe(1);
+
+    const tx2 = await campaign.connect(signer1).contribute({ value: ethers.BigNumber.from('150') });
+    await tx2.wait();
+
+    const secondContributionCount = BigNumber.from(await campaign.contributorsCount()).toNumber();
+    expect(secondContributionCount).toBe(1);
+  });
+
   it('allows a manager to make a payment request', async () => {
     const recipient = await signer1.getAddress();
     const request: PaymentRequest = {

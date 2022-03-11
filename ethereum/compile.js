@@ -6,7 +6,7 @@ const contractName = 'Campaign.sol';
 
 const buildPath = path.resolve(__dirname, 'build');
 
-const campaignPath = path.resolve(__dirname, 'contracts', contractName);
+const campaignPath = path.resolve(__dirname, 'contracts', 'Campaign', contractName);
 const campaignSource = fs.readFileSync(campaignPath, 'utf8');
 
 var input = {

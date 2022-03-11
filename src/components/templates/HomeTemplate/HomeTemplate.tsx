@@ -17,15 +17,14 @@ const HomeTemplate: FC = () => {
       factory
         .getDeployedCampaigns()
         .then(setDeployedCampaigns)
+        .catch(console.error)
         .finally(() => setLoading(false));
     }
   }, [factory]);
 
   return (
     <MainLayout>
-      <Typography variant="h4" textAlign="center">
-        List of campaigns
-      </Typography>
+      <Typography variant="h4">List of campaigns</Typography>
       <Stack spacing={2} mt={2}>
         {isLoading && !deployedCampaigns.length && <Typography>Loading...</Typography>}
         {!isLoading && deployedCampaigns.length === 0 && (

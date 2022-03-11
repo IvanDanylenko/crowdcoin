@@ -35,7 +35,7 @@ const AdminPage: NextPage = () => {
         setLoading(false);
       } catch (err) {
         console.error(err);
-        // TODO: display error
+        // TODO: display error with snackbar
       }
     } else {
       // TODO: add error notification to install metamask (snackbar)

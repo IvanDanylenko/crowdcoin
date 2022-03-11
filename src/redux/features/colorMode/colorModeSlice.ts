@@ -7,7 +7,7 @@ interface ColorModeState {
 
 // Define the initial state using that type
 const initialState: ColorModeState = {
-  mode: 'dark',
+  mode: 'light',
 };
 
 export const colorModeSlice = createSlice({

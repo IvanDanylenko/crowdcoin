@@ -13,7 +13,11 @@ const SelectField: FC<SelectProps> = ({ name, choices, label, ...rest }) => {
   return (
     <FormControl fullWidth error={meta.touched && !!meta.error}>
       <InputLabel id="demo-simple-select-label">{label}</InputLabel>
-      <Select {...field} {...rest}>
+      <Select
+        {...field}
+        {...rest}
+        label={label} // it enters label in hidden fieldset
+      >
         {choices?.map(choice => {
           if (typeof choice === 'string') {
             return (

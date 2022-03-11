@@ -16,7 +16,7 @@ const useEthereumProvider = (): ExtendedWeb3Provider | undefined => {
 
       // Add support for requesting accounts for convenience
       web3Provider.requestAccounts = async () => {
-        return web3Provider.send('eth_requestAccounts', []);
+        return web3Provider.send('eth_accounts', []);
       };
 
       dispatch(setProvider(web3Provider));
