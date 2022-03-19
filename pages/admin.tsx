@@ -16,6 +16,8 @@ const AdminPage: NextPage = () => {
   const handleDeployFactory = async () => {
     if (provider) {
       try {
+        await provider.switchToDefaultChain();
+
         await provider.requestAccounts();
 
         const signer = provider.getSigner();

@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { useRouter } from 'next/router';
 import { Grid } from '@mui/material';
-import { Formik, Form, FormikConfig } from 'formik';
+import { Formik, Form, FormikConfig, getIn } from 'formik';
 import { object, string, InferType } from 'yup';
 import { utils } from 'ethers';
 import { unitNames } from '@/app/constants';
-import { useCampaignContract } from '@/hooks';
+import { useCampaignContract, useNotify } from '@/hooks';
 import { MainLayout } from '@organisms/layouts';
 import { TextField, SelectField, SubmitButton } from '@molecules/fields';
 
@@ -17,6 +17,7 @@ const validationSchema = object({
 type Values = InferType<typeof validationSchema>;
 
 const CampaignCreateTemplate: FC = () => {
+  const notify = useNotify();
   const { factory, provider } = useCampaignContract();
   const router = useRouter();
 
@@ -25,26 +26,19 @@ const CampaignCreateTemplate: FC = () => {
       try {
         const [signerAddress] = await provider.requestAccounts();
         const signer = provider.getSigner();
-        // const transactionCount = await signer.getTransactionCount();
-
-        // Calculate contract address that was deployed
-        // TODO: fix campaign address, incorrect calculation
-        // const campaignAddress = utils.getContractAddress({
-        //   from: signerAddress,
-        //   nonce: transactionCount,
-        // });
 
         const tx = await factory
           .connect(signer)
           .createCampaign(signerAddress, utils.parseUnits(contribution, unit).toString());
         await tx.wait();
+        notify('Campaign was successfully created');
         router.push('/');
-        // TODO: show success message (snackbar)
       } catch (err) {
         console.error(err);
+        notify(getIn(err, 'error.message'), 'error');
       }
     } else {
-      console.error('Metamask not detected or contract not created');
+      notify('Metamask not detected or contract not created', 'error');
     }
   };
 

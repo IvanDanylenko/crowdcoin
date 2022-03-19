@@ -1,8 +1,9 @@
 import { FC, useState, useEffect } from 'react';
+import { Card, CardContent, Grid } from '@mui/material';
 import { MainLayout } from '@organisms/layouts';
 import { useCampaignContract } from '@/hooks';
 import Typography from '@atoms/Typography';
-import { Card, CardContent, Grid } from '@mui/material';
+import { networks } from '@/app/constants';
 import Link from '@atoms/links/Link';
 
 const HomeTemplate: FC = () => {
@@ -25,10 +26,17 @@ const HomeTemplate: FC = () => {
   return (
     <MainLayout>
       <Typography variant="h4">List of campaigns</Typography>
+      <Typography>Please use {networks[0].chainName} as your network</Typography>
       <Grid container spacing={2} mt={2}>
-        {isLoading && !deployedCampaigns.length && <Typography>Loading...</Typography>}
+        {isLoading && !deployedCampaigns.length && (
+          <Grid item>
+            <Typography>Loading...</Typography>
+          </Grid>
+        )}
         {!isLoading && deployedCampaigns.length === 0 && (
-          <Typography>No deployed campaigns found</Typography>
+          <Grid item>
+            <Typography>No deployed campaigns found</Typography>
+          </Grid>
         )}
         {deployedCampaigns.map(campaignAddress => (
           <Grid key={campaignAddress} item xs={12} sm={6}>

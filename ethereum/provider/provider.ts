@@ -1,4 +1,5 @@
-import { providers } from 'ethers';
+import { providers, utils } from 'ethers';
+import { networks } from '@/app/constants';
 import { ExtendedWeb3Provider } from './types';
 
 let provider: ExtendedWeb3Provider | undefined;
@@ -17,6 +18,16 @@ if (typeof window !== 'undefined' && window.ethereum) {
 
   provider.switchEthereumChain = async chainId => {
     return provider?.send('wallet_switchEthereumChain', [{ chainId }]);
+  };
+
+  provider.switchToDefaultChain = async () => {
+    const network = await provider?.getNetwork();
+
+    const defaultChainId = networks[0].chainId;
+
+    if (network?.chainId !== defaultChainId) {
+      await provider?.switchEthereumChain(utils.hexValue(defaultChainId));
+    }
   };
 
   // Reload page on network change

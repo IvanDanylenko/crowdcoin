@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { useRouter } from 'next/router';
 import { Grid, Stack } from '@mui/material';
-import { Formik, Form, FormikConfig } from 'formik';
+import { Formik, Form, FormikConfig, getIn } from 'formik';
 import { object, string, InferType } from 'yup';
 import { utils } from 'ethers';
 import { unitNames } from '@/app/constants';
-import { useCampaignContract } from '@/hooks';
+import { useCampaignContract, useNotify } from '@/hooks';
 import { MainLayout } from '@organisms/layouts';
 import { TextField, SelectField, SubmitButton } from '@molecules/fields';
 
@@ -21,8 +21,10 @@ const validationSchema = object({
 type Values = InferType<typeof validationSchema>;
 
 const RequestCreateTemplate: FC = () => {
-  const { query } = useRouter();
-  const { campaign, provider } = useCampaignContract(query.id as string);
+  const notify = useNotify();
+  const router = useRouter();
+  const campaignId = router.query.id as string;
+  const { campaign, provider } = useCampaignContract(campaignId);
 
   const handleSubmit: FormikConfig<Values>['onSubmit'] = async ({
     description,
@@ -39,12 +41,15 @@ const RequestCreateTemplate: FC = () => {
           .connect(signer)
           .createRequest(description, recipient, utils.parseUnits(amount, unit).toString());
         await tx.wait();
-        // TODO: show success message, redirect to created request by id
+
+        notify('Request was successfully created');
+        router.push(`/campaigns/${campaignId}/requests`);
       } catch (err) {
         console.error(err);
+        notify(getIn(err, 'error.message'), 'error');
       }
     } else {
-      console.error('Metamask not detected or contract not created');
+      notify('Metamask not detected or contract not created', 'error');
     }
   };
 

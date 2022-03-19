@@ -17,4 +17,5 @@ export interface ExtendedWeb3Provider extends Web3Provider {
   requestAccounts: () => Promise<string[]>;
   addEthereumChain: (param: EthereumNetwork) => Promise<null>;
   switchEthereumChain: (chainId: string) => Promise<null>;
+  switchToDefaultChain: () => Promise<void>;
 }

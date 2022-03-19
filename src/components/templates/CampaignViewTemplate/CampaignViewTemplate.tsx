@@ -1,8 +1,7 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
-import { utils, BigNumber } from 'ethers';
 import { Grid, Card, SxProps } from '@mui/material';
-import { unitNames } from '@/app/constants';
+import { autoFormatUnits } from '@/app/helpers';
 import { useCampaignContract } from '@/hooks';
 import { MainLayout } from '@organisms/layouts';
 import ContributeForm from '@organisms/forms/ContributeForm';
@@ -17,34 +16,30 @@ const cardSx: SxProps = {
 const CampaignViewTemplate: FC = () => {
   const { query } = useRouter();
   const { campaign, provider } = useCampaignContract(query.id as string);
+  const [balance, setBalance] = useState<string>();
   const [minimumContribution, setMinimumContribution] = useState<string>();
   const [contributorsCount, setContributorsCount] = useState<string>();
-  const [balance, setBalance] = useState<string>();
+  const [requestsCount, setRequestsCount] = useState<string>();
 
-  useEffect(() => {
-    if (campaign && provider) {
-      // TODO: improve
-      const autoFormatUnits = (value: string | BigNumber) => {
-        const strValue = BigNumber.from(value).toString();
-        const unitIndex = Math.floor((strValue.length - 1) / 3);
-        if (unitNames[unitIndex]) {
-          return `${utils.formatUnits(value, unitNames[unitIndex])} ${unitNames[unitIndex]}`;
-        } else {
-          return `${utils.formatEther(value)} ${unitNames[unitNames.length - 1]}`;
-        }
-      };
-      campaign.minimumContribution().then(data => setMinimumContribution(autoFormatUnits(data)));
-      campaign.contributorsCount().then(data => setContributorsCount(data.toString()));
+  const getCampaignData = useCallback(() => {
+    if (provider && campaign) {
       provider.getBalance(campaign.address).then(data => {
         setBalance(autoFormatUnits(data));
       });
+      campaign.minimumContribution().then(data => setMinimumContribution(autoFormatUnits(data)));
+      campaign.contributorsCount().then(data => setContributorsCount(data.toString()));
+      campaign.requestsCount().then(data => setRequestsCount(data.toString()));
     }
-  }, [campaign, provider]);
+  }, [provider, campaign]);
+
+  useEffect(() => {
+    getCampaignData();
+  }, [getCampaignData]);
 
   return (
     <MainLayout>
       <Grid container spacing={4} justifyContent="space-between" alignItems="center">
-        <Grid item sm={7} lg={9}>
+        <Grid item sm={8} lg={9}>
           <Typography mb={3} variant="h4">
             Campaign details
           </Typography>
@@ -52,21 +47,33 @@ const CampaignViewTemplate: FC = () => {
             <Grid item xs={12} md={6}>
               <Card sx={cardSx}>
                 <Typography>Balance: {balance}</Typography>
+                <Typography variant="subtitle2" mt={1}>
+                  Amount of money this campaign stores
+                </Typography>
               </Card>
             </Grid>
             <Grid item xs={12} md={6}>
               <Card sx={cardSx}>
                 <Typography>Minimum contribution: {minimumContribution}</Typography>
+                <Typography variant="subtitle2" mt={1}>
+                  Required amount to become a contributor
+                </Typography>
               </Card>
             </Grid>
             <Grid item xs={12} md={6}>
               <Card sx={cardSx}>
-                <Typography>Requests: NAN</Typography>
+                <Typography>Requests: {requestsCount}</Typography>
+                <Typography variant="subtitle2" mt={1}>
+                  Describe how money will be spent
+                </Typography>
               </Card>
             </Grid>
             <Grid item xs={12} md={6}>
               <Card sx={cardSx}>
                 <Typography>Contributors: {contributorsCount}</Typography>
+                <Typography variant="subtitle2" mt={1}>
+                  People who contributed to campaign
+                </Typography>
               </Card>
             </Grid>
           </Grid>
@@ -74,8 +81,8 @@ const CampaignViewTemplate: FC = () => {
             View requests
           </Button>
         </Grid>
-        <Grid item sm={5} lg={3}>
-          {campaign && provider && <ContributeForm campaign={campaign} provider={provider} />}
+        <Grid item sm={4} lg={3}>
+          <ContributeForm campaignId={query.id as string} onSuccess={getCampaignData} />
         </Grid>
       </Grid>
     </MainLayout>

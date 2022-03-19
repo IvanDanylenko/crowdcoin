@@ -1,12 +1,13 @@
 import { FC } from 'react';
 import { Stack } from '@mui/material';
 import { utils } from 'ethers';
-import { Formik, Form, FormikConfig } from 'formik';
+import { Formik, Form, FormikConfig, getIn } from 'formik';
 import { object, string, InferType } from 'yup';
 import { unitNames } from '@/app/constants';
 import Typography from '@atoms/Typography';
 import { TextField, SelectField, SubmitButton } from '@molecules/fields';
 import { ContributeFormProps } from './types';
+import { useCampaignContract, useNotify } from '@/hooks';
 
 const validationSchema = object({
   amount: string().required('Required'),
@@ -15,7 +16,10 @@ const validationSchema = object({
 
 type Values = InferType<typeof validationSchema>;
 
-const ContributeForm: FC<ContributeFormProps> = ({ campaign, provider }) => {
+const ContributeForm: FC<ContributeFormProps> = ({ campaignId, onSuccess }) => {
+  const { campaign, provider } = useCampaignContract(campaignId);
+  const notify = useNotify();
+
   const handleSubmit: FormikConfig<Values>['onSubmit'] = async ({ amount, unit }) => {
     if (campaign && provider) {
       try {
@@ -25,12 +29,13 @@ const ContributeForm: FC<ContributeFormProps> = ({ campaign, provider }) => {
           .connect(signer)
           .contribute({ value: utils.parseUnits(amount, unit) });
         await tx.wait();
-        console.log('success');
+        onSuccess();
       } catch (err) {
         console.error(err);
+        notify(getIn(err, 'error.message'), 'error');
       }
     } else {
-      console.log('Provider or campaign not defined');
+      notify('Provider or campaign not defined', 'error');
     }
   };
 

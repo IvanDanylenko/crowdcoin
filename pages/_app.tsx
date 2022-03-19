@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 
 import { ReduxProvider, I18nProvider, ThemeProvider, createEmotionCache } from '@/providers';
+import { Snackbar } from '@molecules/notifications';
 
 // Fonts
 import '@fontsource/inter/variable.css';
@@ -26,6 +27,7 @@ const MyApp = (props: MyAppProps) => {
         <I18nProvider table={pageProps.table}>
           <ThemeProvider>
             <Component {...pageProps} />
+            <Snackbar />
           </ThemeProvider>
         </I18nProvider>
       </ReduxProvider>

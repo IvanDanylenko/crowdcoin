@@ -1,8 +1,6 @@
 import { FC } from 'react';
 import { AppBar, Container, Toolbar, Grid } from '@mui/material';
-import { utils } from 'ethers';
 import provider from 'ethereum/provider';
-import { networks } from '@/app/constants';
 import { IconButton, Button } from '@atoms/buttons';
 import Link from '@atoms/links/Link';
 import { useAppSelector, useAppDispatch } from '@/hooks';
@@ -15,13 +13,7 @@ const Header: FC = () => {
 
   const handleConnectWallet = async () => {
     if (provider) {
-      const network = await provider.getNetwork();
-
-      const defaultChainId = networks[0].chainId;
-
-      if (network.chainId !== defaultChainId) {
-        await provider.switchEthereumChain(utils.hexValue(defaultChainId));
-      }
+      await provider.switchToDefaultChain();
     }
   };
 

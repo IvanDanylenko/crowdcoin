@@ -1,10 +1,10 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import colorModeReducer from './features/colorMode';
-import ethereumReducer from './features/ethereum';
+import notifyReducer from './features/notify';
 
 const reducers = combineReducers({
   colorMode: colorModeReducer,
-  ethereum: ethereumReducer,
+  notify: notifyReducer,
 });
 
 export default reducers;
