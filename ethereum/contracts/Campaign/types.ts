@@ -31,6 +31,7 @@ export interface CampaignContract extends Contract {
   minimumContribution: () => Promise<BigNumber>;
   contributorsCount: () => Promise<BigNumber>;
   requests: (index: number) => Promise<RequestStruct>;
+  requestsCount: () => Promise<BigNumber>;
 
   // setters
   contribute: (overrides: PayableOverrides) => Promise<ContractTransaction>;

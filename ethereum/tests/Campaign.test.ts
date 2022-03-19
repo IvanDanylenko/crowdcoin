@@ -102,6 +102,10 @@ describe('Campaign contract', () => {
     const normalizedRequest = normalizeStructRequest(receivedRequest);
 
     expect(request).toEqual(normalizedRequest);
+
+    const requestsCount = await campaign.requestsCount();
+
+    expect(requestsCount.toNumber()).toBe(1);
   });
 
   it('requires manager to make a payment request', async () => {

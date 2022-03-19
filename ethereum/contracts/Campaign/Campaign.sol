@@ -55,6 +55,10 @@ contract Campaign {
         minimumContribution = minimum;
     }
 
+    function requestsCount() public view returns(uint) {
+        return requests.length;
+    }
+
     function contribute() public payable {
         require(msg.value >= minimumContribution, "Minimum contribution is required");
         // Check if person already is contributor
