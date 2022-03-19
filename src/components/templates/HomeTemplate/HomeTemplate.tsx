@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from 'react';
 import { MainLayout } from '@organisms/layouts';
 import { useCampaignContract } from '@/hooks';
 import Typography from '@atoms/Typography';
-import { Stack } from '@mui/material';
+import { Card, CardContent, Grid } from '@mui/material';
 import Link from '@atoms/links/Link';
 
 const HomeTemplate: FC = () => {
@@ -25,17 +25,26 @@ const HomeTemplate: FC = () => {
   return (
     <MainLayout>
       <Typography variant="h4">List of campaigns</Typography>
-      <Stack spacing={2} mt={2}>
+      <Grid container spacing={2} mt={2}>
         {isLoading && !deployedCampaigns.length && <Typography>Loading...</Typography>}
         {!isLoading && deployedCampaigns.length === 0 && (
           <Typography>No deployed campaigns found</Typography>
         )}
         {deployedCampaigns.map(campaignAddress => (
-          <Link key={campaignAddress} color="textPrimary" href={`/campaigns/${campaignAddress}`}>
-            {campaignAddress}
-          </Link>
+          <Grid key={campaignAddress} item xs={12} sm={6}>
+            <Card>
+              <CardContent>
+                <Typography my={0.5} noWrap>
+                  {campaignAddress}
+                </Typography>
+                <Link color="textPrimary" underline="none" href={`/campaigns/${campaignAddress}`}>
+                  View
+                </Link>
+              </CardContent>
+            </Card>
+          </Grid>
         ))}
-      </Stack>
+      </Grid>
     </MainLayout>
   );
 };

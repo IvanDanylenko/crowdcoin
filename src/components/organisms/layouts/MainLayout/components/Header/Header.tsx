@@ -1,6 +1,9 @@
 import { FC } from 'react';
 import { AppBar, Container, Toolbar, Grid } from '@mui/material';
-import { IconButton } from '@atoms/buttons';
+import { utils } from 'ethers';
+import provider from 'ethereum/provider';
+import { networks } from '@/app/constants';
+import { IconButton, Button } from '@atoms/buttons';
 import Link from '@atoms/links/Link';
 import { useAppSelector, useAppDispatch } from '@/hooks';
 import { selectMode, toggleColorMode } from '@/redux/features/colorMode';
@@ -9,6 +12,19 @@ import { Brightness4Icon, Brightness7Icon, AddIcon } from '@/assets/icons';
 const Header: FC = () => {
   const mode = useAppSelector(selectMode);
   const dispatch = useAppDispatch();
+
+  const handleConnectWallet = async () => {
+    if (provider) {
+      const network = await provider.getNetwork();
+
+      const defaultChainId = networks[0].chainId;
+
+      if (network.chainId !== defaultChainId) {
+        await provider.switchEthereumChain(utils.hexValue(defaultChainId));
+      }
+    }
+  };
+
   return (
     <AppBar position="static" elevation={0}>
       <Container maxWidth="xl">
@@ -20,6 +36,9 @@ const Header: FC = () => {
               </Link>
             </Grid>
             <Grid item xs={6} container alignItems="center" justifyContent="flex-end">
+              <Button variant="outlined" size="small" sx={{ mr: 1 }} onClick={handleConnectWallet}>
+                Connect wallet
+              </Button>
               <Link
                 href="/"
                 color="textPrimary"

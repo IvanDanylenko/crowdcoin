@@ -2,7 +2,7 @@ import type { NextPage, GetStaticProps } from 'next';
 import { useState } from 'react';
 import { Grid } from '@mui/material';
 import { ethers } from 'ethers';
-import { useEthereumProvider } from '@/hooks';
+import provider from 'ethereum/provider';
 import { MainLayout } from '@organisms/layouts';
 import Typography from '@atoms/Typography';
 import { Button } from '@atoms/buttons';
@@ -12,7 +12,6 @@ import compiledFactory from 'ethereum/build/CampaignFactory.json';
 const AdminPage: NextPage = () => {
   const [isLoading, setLoading] = useState(false);
   const [factoryAddress, setFactoryAddress] = useState('');
-  const provider = useEthereumProvider();
 
   const handleDeployFactory = async () => {
     if (provider) {

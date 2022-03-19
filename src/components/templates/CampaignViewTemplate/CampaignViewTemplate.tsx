@@ -61,7 +61,7 @@ const CampaignViewTemplate: FC = () => {
             </Grid>
             <Grid item xs={12} md={6}>
               <Card sx={cardSx}>
-                <Typography>Pending requests: NAN</Typography>
+                <Typography>Requests: NAN</Typography>
               </Card>
             </Grid>
             <Grid item xs={12} md={6}>

@@ -1,9 +1,9 @@
 {
   "**/*.{md,json}": ["yarn prettier --write"],
-  "**/*.{js,ts,jsx,tsx}": [
+  "**/*.{js,jsx,ts,tsx}": [
     "yarn eslint",
-    "yarn tsc-files --incremental false src/custom.d.ts",
     "yarn test:all --findRelatedTests",
     "yarn prettier --write"
-  ]
+  ],
+  "**/*.{ts,tsx}": ["yarn tsc-files --incremental false src/custom.d.ts"]
 }

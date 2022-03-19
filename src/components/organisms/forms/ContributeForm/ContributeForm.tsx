@@ -48,7 +48,7 @@ const ContributeForm: FC<ContributeFormProps> = ({ campaign, provider }) => {
           <Stack spacing={2}>
             <TextField name="amount" label="Amount" />
             <SelectField name="unit" label="Unit" choices={unitNames} />
-            <SubmitButton>Contribute</SubmitButton>
+            <SubmitButton>Contribute!</SubmitButton>
           </Stack>
         </Form>
       </Formik>

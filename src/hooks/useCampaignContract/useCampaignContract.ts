@@ -1,13 +1,11 @@
 import { useMemo } from 'react';
 import { ethers } from 'ethers';
+import provider from 'ethereum/provider';
+import type { CampaignContract, CampaignFactoryContract } from 'ethereum/contracts/Campaign';
 import compiledFactory from 'ethereum/build/CampaignFactory.json';
 import compiledCampaign from 'ethereum/build/Campaign.json';
-import type { CampaignContract, CampaignFactoryContract } from 'ethereum/contracts/Campaign';
-import useEthereumProvider from '../useEthereumProvider';
 
 const useCampaignContract = (campaignAddress?: string) => {
-  const provider = useEthereumProvider();
-
   const factory = useMemo<CampaignFactoryContract | undefined>(() => {
     const factoryAddress = process.env.NEXT_PUBLIC_CAMPAIGN_FACTORY_ADDRESS;
     if (factoryAddress && provider) {
@@ -17,7 +15,7 @@ const useCampaignContract = (campaignAddress?: string) => {
         provider,
       ) as CampaignFactoryContract;
     }
-  }, [provider]);
+  }, []);
 
   const campaign = useMemo<CampaignContract | undefined>(() => {
     if (campaignAddress && provider) {
@@ -27,7 +25,7 @@ const useCampaignContract = (campaignAddress?: string) => {
         provider,
       ) as CampaignContract;
     }
-  }, [provider, campaignAddress]);
+  }, [campaignAddress]);
 
   return { factory, campaign, provider };
 };
