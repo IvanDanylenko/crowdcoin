@@ -1,5 +1,10 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Intro
+
+Cryptocurrency project that communicates with ethereum blockchain to raise funds for startups (crowdfunding).
+Basic functionality, used only with test blockchain network.
+
 ## Getting Started
 
 First, run the development server:
